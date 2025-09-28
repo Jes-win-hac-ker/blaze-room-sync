@@ -62,6 +62,26 @@ This project is built with:
 
 ## How can I deploy this project?
 
+### GitHub Pages (Automatic)
+
+This project is configured for automatic deployment to GitHub Pages. Simply push your changes to the `main` branch and GitHub Actions will automatically build and deploy your app.
+
+1. Make sure GitHub Pages is enabled in your repository settings
+2. Set the source to "GitHub Actions"
+3. Push your changes to the `main` branch
+4. Your app will be available at: `https://jes-win-hac-ker.github.io/blaze-room-sync/`
+
+### Manual Build for GitHub Pages
+
+```sh
+# Build for GitHub Pages
+npm run build:github
+
+# The built files will be in the 'dist' directory
+```
+
+### Lovable Platform
+
 Simply open [Lovable](https://lovable.dev/projects/16b57b5a-7c36-4880-9862-0b18f33a258b) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?

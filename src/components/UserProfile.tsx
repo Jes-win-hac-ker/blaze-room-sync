@@ -1,7 +1,16 @@
 import React from 'react';
-import { Settings, Mic, MicOff, HeadphonesIcon } from 'lucide-react';
+import { Settings, Mic, MicOff, HeadphonesIcon, LogOut } from 'lucide-react';
 import { User } from '../contexts/ChatContext';
+import { useAuth } from '../contexts/AuthContext';
 import { UserAvatar } from './UserAvatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface UserProfileProps {
   user: User;
@@ -10,22 +19,34 @@ interface UserProfileProps {
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const [isMuted, setIsMuted] = React.useState(false);
   const [isDeafened, setIsDeafened] = React.useState(false);
+  const { user: authUser, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  // Use authenticated user data if available
+  const displayUser = authUser ? {
+    ...user,
+    name: authUser.displayName || authUser.username,
+    avatar: authUser.avatar || user.avatar
+  } : user;
 
   return (
     <div className="p-3 border-t border-border bg-chat-sidebar">
       <div className="flex items-center gap-3">
         <UserAvatar 
-          user={user} 
+          user={displayUser} 
           size="md" 
           showStatus 
         />
         
         <div className="flex-1 min-w-0">
           <div className="font-medium text-sm text-foreground truncate">
-            {user.name}
+            {displayUser.name}
           </div>
           <div className="text-xs text-muted-foreground capitalize">
-            {user.status}
+            {displayUser.status}
           </div>
         </div>
 
@@ -50,12 +71,22 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             <HeadphonesIcon className="w-4 h-4" />
           </button>
 
-          <button
-            className="p-2 rounded hover:bg-chat-sidebar-hover transition-colors text-muted-foreground"
-            title="Settings"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="p-2 rounded hover:bg-chat-sidebar-hover transition-colors text-muted-foreground"
+                title="Settings"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

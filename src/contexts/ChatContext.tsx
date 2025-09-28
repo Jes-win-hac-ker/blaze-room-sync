@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 export interface User {
   id: string;
@@ -118,7 +119,15 @@ const mockUsers: User[] = [
 ];
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser] = useState<User>(mockUsers[0]);
+  const { user: authUser } = useAuth();
+  
+  // Create chat user from authenticated user
+  const currentUser: User = authUser ? {
+    id: authUser.id,
+    name: authUser.displayName || authUser.username,
+    avatar: authUser.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+    status: 'online' as const
+  } : mockUsers[0];
   const [rooms] = useState<Room[]>(mockRooms);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(mockRooms[0]);
   const [messages, setMessages] = useState<Message[]>([]);
