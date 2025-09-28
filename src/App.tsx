@@ -47,7 +47,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.PROD ? '/blaze-room-sync' : ''}>
           <AppContent />
         </BrowserRouter>
       </TooltipProvider>
